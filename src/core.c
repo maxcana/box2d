@@ -208,6 +208,7 @@ void* b2GrowAlloc( void* oldMem, size_t oldSize, size_t newSize )
 		memcpy( newMem, oldMem, oldSize );
 		b2Free( oldMem, oldSize );
 	}
+	memset( (char*)newMem + oldSize, 0, newSize - oldSize ); //! RC PATCH
 	return newMem;
 }
 

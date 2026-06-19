@@ -130,7 +130,14 @@ B2_INLINE void* b2EmplaceHelper( void** data, int* count, int* capacity, int ele
 		*data = b2GrowAlloc( *data, oldSize, newSize );
 		*capacity = newCapacity;
 	}
-	return (char*)*data + ( *count )++ * elementSize;
+    void* slot = (char*)*data + ( *count )++ * elementSize;
+    memset( slot, 0, elementSize );  //! RC PATCH - zero this. Box2D is completely deterministic, but its state has extra bytes since they dont use a BitWriter like me. 
+	//! they write the entire struct, including uninitialized junk struct end padding.
+	//! and that is not deterministic, so the snapshots store the correct data in the struct always...
+	//! but the padding junk bytes diverge run-to-run resulting in different hashes of the entire data.
+	//! which my world hashing algorithm relies on to detect desyncs.
+    // i wonder if we should also zero the new slot in b2GrowAlloc.
+	return slot;
 }
 
 B2_INLINE int b2RemoveHelper( void* data, int* count, int index, int elementSize )

@@ -113,6 +113,7 @@ static bool b2SensorQueryCallback( int proxyId, uint64_t userData, void* context
 	// Record the overlap
 	b2Sensor* sensor = queryContext->sensor;
 	b2Visitor* shapeRef = b2Array_Emplace( sensor->overlaps2 );
+	// memset( shapeRef, 0, sizeof( *shapeRef ) );   // <-- temporary diagnostic
 	shapeRef->shapeId = shapeId;
 	shapeRef->generation = otherShape->generation;
 
