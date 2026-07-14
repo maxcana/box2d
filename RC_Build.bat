@@ -2,4 +2,8 @@ cmake -B build -DBOX2D_SAMPLES=ON -DBUILD_SHARED_LIBS=ON -DBOX2D_VALIDATE=OFF -D
 
 cmake --build build --config Release
 
-explorer "E:\dev\forks\box2d\build\src\Release"
+if exist "%~dp0build\src\Release" (
+    explorer "%~dp0build\src\Release" : compiled with MSVC
+) else (
+    explorer "%~dp0build\src" : compiled with MinGW
+)
